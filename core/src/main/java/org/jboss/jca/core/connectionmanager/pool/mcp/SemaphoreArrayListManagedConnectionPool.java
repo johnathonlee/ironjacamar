@@ -799,7 +799,7 @@ public class SemaphoreArrayListManagedConnectionPool implements ManagedConnectio
     *
     * @param cl the connection to destroy
     */
-   private void doDestroy(ConnectionListener cl)
+   void doDestroy(ConnectionListener cl)
    {
       if (cl.getState() == ConnectionState.DESTROYED)
       {
@@ -931,6 +931,18 @@ public class SemaphoreArrayListManagedConnectionPool implements ManagedConnectio
             }
          }
       }
+   }
+
+   /**
+    * Get the pool name
+    * @return The value
+    */
+   String getPoolName()
+   {
+      if (pool == null)
+         return "";
+
+      return pool.getName();
    }
 
    /**
