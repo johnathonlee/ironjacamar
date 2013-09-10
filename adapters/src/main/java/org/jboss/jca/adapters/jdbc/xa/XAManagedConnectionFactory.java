@@ -425,7 +425,7 @@ public class XAManagedConnectionFactory extends BaseWrapperManagedConnectionFact
    /**
     * {@inheritDoc}
     */
-   public synchronized ManagedConnection createManagedConnection(Subject subject, ConnectionRequestInfo cri)
+   public ManagedConnection createManagedConnection(Subject subject, ConnectionRequestInfo cri)
       throws javax.resource.ResourceException
    {
       if (urlProperty != null && !urlProperty.trim().equals("") && xadsSelector == null)
@@ -472,7 +472,7 @@ public class XAManagedConnectionFactory extends BaseWrapperManagedConnectionFact
       throws ResourceException
    {
       XAConnection xaConnection = null;
-      Properties props = getConnectionProperties(subject, cri);
+      Properties props = getConnectionProperties(null, subject, cri);
 
       try
       {
@@ -520,7 +520,7 @@ public class XAManagedConnectionFactory extends BaseWrapperManagedConnectionFact
    public ManagedConnection matchManagedConnections(Set mcs, Subject subject, ConnectionRequestInfo cri)
       throws ResourceException
    {
-      Properties newProps = getConnectionProperties(subject, cri);
+      Properties newProps = getConnectionProperties(null, subject, cri);
       for (Iterator<?> i = mcs.iterator(); i.hasNext();)
       {
          Object o = i.next();
@@ -543,6 +543,19 @@ public class XAManagedConnectionFactory extends BaseWrapperManagedConnectionFact
          }
       }
       return null;
+   }
+
+   /**
+    * Is the properties equal
+    * @param other The other properties
+    * @return True if equal, otherwise false
+    */
+   private boolean isEqual(Map<String, String> other)
+   {
+      synchronized (xaProps)
+      {
+         return xaProps.equals(other);
+      }
    }
 
    /**
@@ -573,7 +586,7 @@ public class XAManagedConnectionFactory extends BaseWrapperManagedConnectionFact
          return false;
 
       XAManagedConnectionFactory otherMcf = (XAManagedConnectionFactory) other;
-      return this.xaDataSourceClass.equals(otherMcf.xaDataSourceClass) && this.xaProps.equals(otherMcf.xaProps)
+      return this.xaDataSourceClass.equals(otherMcf.xaDataSourceClass) && isEqual(otherMcf.xaProps)
          && ((this.userName == null) ? otherMcf.userName == null : this.userName.equals(otherMcf.userName))
          && ((this.password == null) ? otherMcf.password == null : this.password.equals(otherMcf.password))
          && this.transactionIsolation == otherMcf.transactionIsolation;
