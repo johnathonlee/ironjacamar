@@ -1,0 +1,450 @@
+<!--
+ * JBoss, Home of Professional Open Source.
+ * Copyright 2010, Red Hat Middleware LLC, and individual contributors
+ * as indicated by the @author tags. See the copyright.txt file in the
+ * distribution for a full listing of individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.jboss</groupId>
+    <artifactId>jboss-parent</artifactId>
+    <version>11-redhat-1</version>
+  </parent>
+
+  <groupId>org.jboss.ironjacamar</groupId>
+  <artifactId>ironjacamar-project</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0.21.Final</version>
+  <name>IronJacamar</name>
+  <url>http://www.jboss.org/ironjacamar</url>
+  <description>
+    IronJacamar is an implementation of the Java EE Connector Architecture 1.6 specification
+  </description>
+  <licenses>
+    <license>
+      <name>lgpl</name>
+      <url>http://repository.jboss.org/licenses/lgpl.txt</url>
+    </license>
+  </licenses>
+  <organization>
+    <name>JBoss, by Red Hat</name>
+    <url>http://www.jboss.org</url>
+  </organization>
+  <scm>
+    <url>http://fisheye.jboss.org/browse/JBossAS/projects/jboss-jca/</url>
+    <connection>http://anonsvn.jboss.org/repos/jbossas/projects/jboss-jca/branches/Branch_1_0</connection>
+    <developerConnection>https://svn.jboss.org/repos/jbossas/projects/jboss-jca/branches/Branch_1_0</developerConnection>
+  </scm>
+  <developers>
+    <developer>
+      <id>jesper.pedersen</id>
+      <name>Jesper Pedersen</name>
+      <organization>JBoss, by Red Hat</organization>
+    </developer>
+    <developer>
+      <id>jeff.zhang</id>
+      <name>Jeff Zhang</name>
+      <organization>JBoss, by Red Hat</organization>
+    </developer>
+    <developer>
+      <id>maeste</id>
+      <name>Stefano Maestri</name>
+      <organization>JBoss, by Red Hat</organization>
+    </developer>
+  </developers>
+  <properties>
+    <version.org.apache.ivy.ivy>2.3.0</version.org.apache.ivy.ivy>
+    <version.org.jboss.apiviz.apiviz>1.3.2.GA</version.org.jboss.apiviz.apiviz>
+    <version.org.jboss.jdeparser>1.0.0.Final-redhat-1</version.org.jboss.jdeparser>
+    <version.org.jboss.threads.jboss-threads>2.1.1.Final-redhat-1</version.org.jboss.threads.jboss-threads>
+  </properties>
+  <dependencyManagement/>
+  <dependencies/>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.8</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.8</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.7</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.9</version>
+          <executions>
+            <execution>
+              <id>attach-javadoc</id>
+              <phase>package</phase>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+              <configuration>
+                <attach>false</attach>
+              </configuration>
+            </execution>
+         </executions>
+        </plugin>
+        <plugin>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.2.1</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <phase>package</phase>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+              <configuration>
+                <attach>false</attach>
+                <skipSource>true</skipSource>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>regex-property</id>
+            <goals>
+              <goal>regex-property</goal>
+            </goals>
+            <configuration>
+              <name>maven.deploy.url</name>
+              <value>${altDeploymentRepository}</value>
+              <regex>^.*::.*::(.*)$</regex>
+              <replacement>$1</replacement>
+              <failIfNoMatch>true</failIfNoMatch>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.jboss.logging</groupId>
+                  <artifactId>jboss-logging</artifactId>
+                  <version>${version.org.jboss.logging.jboss-logging}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jboss.spec.javax.security.auth.message</groupId>
+                  <artifactId>jboss-jaspi-api_1.0_spec</artifactId>
+                  <version>${version.org.jboss.spec.javax.security.auth.message.jboss-jaspi-api_1.0_spec}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jboss.logging</groupId>
+                  <artifactId>jboss-logging</artifactId>
+                  <version>${version.org.jboss.logging.jboss-logging}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jboss.threads</groupId>
+                  <artifactId>jboss-threads</artifactId>
+                  <version>${version.org.jboss.threads.jboss-threads}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jboss.spec.javax.transaction</groupId>
+                  <artifactId>jboss-transaction-api_1.1_spec</artifactId>
+                  <version>${version.org.jboss.spec.javax.transaction.jboss-transaction-api_1.1_spec}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jboss</groupId>
+                  <artifactId>jboss-transaction-spi</artifactId>
+                  <version>${version.org.jboss.jboss-transaction-spi}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jboss.threads</groupId>
+                  <artifactId>jboss-threads</artifactId>
+                  <version>${version.org.jboss.threads.jboss-threads}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jboss.spec.javax.transaction</groupId>
+                  <artifactId>jboss-transaction-api_1.1_spec</artifactId>
+                  <version>${version.org.jboss.spec.javax.transaction.jboss-transaction-api_1.1_spec}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jboss</groupId>
+                  <artifactId>jboss-transaction-spi</artifactId>
+                  <version>${version.org.jboss.jboss-transaction-spi}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.picketbox</groupId>
+                  <artifactId>picketbox</artifactId>
+                  <version>${version.org.picketbox}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>javax.validation</groupId>
+                  <artifactId>validation-api</artifactId>
+                  <version>${version.javax.validation}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jboss.logging</groupId>
+                  <artifactId>jboss-logging</artifactId>
+                  <version>${version.org.jboss.logging.jboss-logging}</version>
+                </artifactItem>
+               <artifactItem>
+                 <groupId>org.jboss.logging</groupId>
+                 <artifactId>jboss-logging-processor</artifactId>
+                 <version>${version.org.jboss.logging.jboss-logging-processor}</version>
+                </artifactItem>
+               <artifactItem>
+                 <groupId>org.jboss.logmanager</groupId>
+                 <artifactId>jboss-logmanager</artifactId>
+                  <version>${version.org.jboss.logmanager.jboss-logmanager}</version>
+                </artifactItem>
+               <artifactItem>
+                 <groupId>org.jboss.logmanager</groupId>
+                 <artifactId>log4j-jboss-logmanager</artifactId>
+                 <version>${version.org.jboss.logmanager.log4j-jboss-logmanager}</version>
+                </artifactItem>
+               <artifactItem>
+                 <groupId>org.jboss.apiviz</groupId>
+                 <artifactId>apiviz</artifactId>
+                 <version>${version.org.jboss.apiviz.apiviz}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.ivy</groupId>
+                  <artifactId>ivy</artifactId>
+                  <version>${version.org.apache.ivy.ivy}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.jboss.jdeparser</groupId>
+                  <artifactId>jdeparser</artifactId>
+                  <version>${version.org.jboss.jdeparser}</version>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.basedir}/jars</outputDirectory>
+              <overWriteReleases>true</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+              <stripVersion>true</stripVersion>
+            </configuration>
+          </execution>
+        </executions>
+        <inherited>false</inherited>
+      </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <propertyfile file="${project.basedir}/build.properties" comment="${project.name}-${project.version} properties">
+                  <entry key="as" value="true"/>
+                  <entry key="ivy.default.ivy.user.dir" value="${user.dir}"/>
+                  <entry key="ivy.dir" value="${project.basedir}/jars"/>
+                  <entry key="ivy.jar.name" value="ivy.jar"/>
+                  <entry key="user.home" value="${user.dir}"/>
+                  <entry key="version" value="${project.version}"/>
+                </propertyfile>
+                <property file="${project.basedir}/build.properties" />
+                <delete dir="${project.basedir}/.ivy2"/>
+                <ant antfile="build.xml" dir="${project.basedir}" target="jars" inheritAll="true" />
+                <ant antfile="build.xml" dir="${project.basedir}" target="nexus" inheritAll="true" />
+                <delete dir="${project.basedir}/.ivy2"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <version>1.6.0</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/../lib/tools.jar</systemPath>
+          </dependency>
+        </dependencies>
+        <inherited>false</inherited>
+      </plugin>
+      <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
+          <executions>
+            <execution>
+              <id>deploy-ironjacamar-common-api</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>deploy-file</goal>
+              </goals>
+              <configuration>
+                <file>${project.build.directory}/ironjacamar-common-api.jar</file>
+                <javadoc>${project.build.directory}/ironjacamar-common-api-javadoc.jar</javadoc>
+                <sources>${project.build.directory}/ironjacamar-common-api-sources.jar</sources>
+                <pomFile>${project.build.directory}/ironjacamar-common-api.xml</pomFile>
+                <url>${maven.deploy.url}</url>
+              </configuration>
+            </execution>
+            <execution>
+              <id>deploy-ironjacamar-common-impl</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>deploy-file</goal>
+              </goals>
+              <configuration>
+                <file>${project.build.directory}/ironjacamar-common-impl.jar</file>
+                <javadoc>${project.build.directory}/ironjacamar-common-impl-javadoc.jar</javadoc>
+                <sources>${project.build.directory}/ironjacamar-common-impl-sources.jar</sources>
+                <pomFile>${project.build.directory}/ironjacamar-common-impl.xml</pomFile>
+                <url>${maven.deploy.url}</url>
+              </configuration>
+            </execution>
+            <execution>
+              <id>deploy-ironjacamar-common-spi</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>deploy-file</goal>
+              </goals>
+              <configuration>
+                <file>${project.build.directory}/ironjacamar-common-spi.jar</file>
+                <javadoc>${project.build.directory}/ironjacamar-common-spi-javadoc.jar</javadoc>
+                <sources>${project.build.directory}/ironjacamar-common-spi-sources.jar</sources>
+                <pomFile>${project.build.directory}/ironjacamar-common-spi.xml</pomFile>
+                <url>${maven.deploy.url}</url>
+              </configuration>
+            </execution>
+            <execution>
+              <id>deploy-ironjacamar-core-api</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>deploy-file</goal>
+              </goals>
+              <configuration>
+                <file>${project.build.directory}/ironjacamar-core-api.jar</file>
+                <javadoc>${project.build.directory}/ironjacamar-core-api-javadoc.jar</javadoc>
+                <sources>${project.build.directory}/ironjacamar-core-api-sources.jar</sources>
+                <pomFile>${project.build.directory}/ironjacamar-core-api.xml</pomFile>
+                <url>${maven.deploy.url}</url>
+              </configuration>
+            </execution>
+            <execution>
+              <id>deploy-ironjacamar-core-impl</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>deploy-file</goal>
+              </goals>
+              <configuration>
+                <file>${project.build.directory}/ironjacamar-core-impl.jar</file>
+                <javadoc>${project.build.directory}/ironjacamar-core-impl-javadoc.jar</javadoc>
+                <sources>${project.build.directory}/ironjacamar-core-impl-sources.jar</sources>
+                <pomFile>${project.build.directory}/ironjacamar-core-impl.xml</pomFile>
+                <url>${maven.deploy.url}</url>
+              </configuration>
+            </execution>
+            <execution>
+              <id>deploy-ironjacamar-deployers-common</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>deploy-file</goal>
+              </goals>
+              <configuration>
+                <file>${project.build.directory}/ironjacamar-deployers-common.jar</file>
+                <javadoc>${project.build.directory}/ironjacamar-deployers-common-javadoc.jar</javadoc>
+                <sources>${project.build.directory}/ironjacamar-deployers-common-sources.jar</sources>
+                <pomFile>${project.build.directory}/ironjacamar-deployers-common.xml</pomFile>
+                <url>${maven.deploy.url}</url>
+              </configuration>
+            </execution>
+            <execution>
+              <id>deploy-ironjacamar-jdbc</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>deploy-file</goal>
+              </goals>
+              <configuration>
+                <file>${project.build.directory}/ironjacamar-jdbc.jar</file>
+                <javadoc>${project.build.directory}/ironjacamar-jdbc-javadoc.jar</javadoc>
+                <sources>${project.build.directory}/ironjacamar-jdbc-sources.jar</sources>
+                <pomFile>${project.build.directory}/ironjacamar-jdbc.xml</pomFile>
+                <url>${maven.deploy.url}</url>
+              </configuration>
+            </execution>
+            <execution>
+              <id>deploy-ironjacamar-spec-api</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>deploy-file</goal>
+              </goals>
+              <configuration>
+                <file>${project.build.directory}/ironjacamar-spec-api.jar</file>
+                <javadoc>${project.build.directory}/ironjacamar-spec-api-javadoc.jar</javadoc>
+                <sources>${project.build.directory}/ironjacamar-spec-api-sources.jar</sources>
+                <pomFile>${project.build.directory}/ironjacamar-spec-api.xml</pomFile>
+                <url>${maven.deploy.url}</url>
+              </configuration>
+            </execution>
+            <execution>
+              <id>deploy-ironjacamar-validator</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>deploy-file</goal>
+              </goals>
+              <configuration>
+                <file>${project.build.directory}/ironjacamar-validator.jar</file>
+                <javadoc>${project.build.directory}/ironjacamar-validator-javadoc.jar</javadoc>
+                <sources>${project.build.directory}/ironjacamar-validator-sources.jar</sources>
+                <pomFile>${project.build.directory}/ironjacamar-validator.xml</pomFile>
+                <url>${maven.deploy.url}</url>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+    </plugins>
+  </build>
+  <reporting />
+</project>
