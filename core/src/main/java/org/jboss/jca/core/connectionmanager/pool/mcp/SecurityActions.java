@@ -71,4 +71,20 @@ class SecurityActions
          }
       });
    }
+
+   /**
+    * Get a classLoader 
+    * @param clazz The class name
+    * @return the ClassLoader
+    */
+   static ClassLoader getClassLoader(final Class<?> clazz) {
+        if (System.getSecurityManager() == null) {
+            return clazz.getClassLoader();
+        }
+        return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+            public ClassLoader run() {
+                return clazz.getClassLoader();
+            }
+        });
+    }
 }
