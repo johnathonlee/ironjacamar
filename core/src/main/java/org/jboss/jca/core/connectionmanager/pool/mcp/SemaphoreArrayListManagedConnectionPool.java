@@ -274,8 +274,6 @@ public class SemaphoreArrayListManagedConnectionPool implements ManagedConnectio
                      checkedOut.add(cl);
                      statistics.setInUsedCount(checkedOut.size());
                   }
-
-                  doDestroy(cl);
                }
                if (cl != null)
                {
@@ -368,11 +366,18 @@ public class SemaphoreArrayListManagedConnectionPool implements ManagedConnectio
                log.throwableWhileAttemptingGetNewGonnection(cl, t);
 
                // Return permit and rethrow
-               synchronized (cls)
+               if (cl != null)
                {
-                  checkedOut.remove(cl);
-                  statistics.setInUsedCount(checkedOut.size());
+                  synchronized (cls)
+                  {
+                     checkedOut.remove(cl);
+                  }
+
+                  doDestroy(cl);
                }
+
+               if (statistics.isEnabled())
+                  statistics.setInUsedCount(checkedOut.size());
 
                permits.release();
 
