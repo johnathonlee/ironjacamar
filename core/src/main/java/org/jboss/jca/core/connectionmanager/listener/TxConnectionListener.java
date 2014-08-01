@@ -71,6 +71,9 @@ public class TxConnectionListener extends AbstractConnectionListener
 
    /** Whether there is a local transaction */
    private final AtomicBoolean localTransaction = new AtomicBoolean(false);
+   
+   /** Nuke connection on boundary */
+   private boolean killConnectionOnBoundary = false;
 
    /**
     * Creates a new tx listener.
@@ -95,6 +98,14 @@ public class TxConnectionListener extends AbstractConnectionListener
       {
          ((LocalXAResource) xaResource).setConnectionListener(this);
       }
+      
+       // Kill connection on boundary logic
+       String value = SecurityActions.getSystemProperty("ironjacamar.kill_connection_on_boundary");
+       if (value != null && !value.trim().equals(""))
+       {
+          if (pool.getName().equals(value))
+             killConnectionOnBoundary = true;
+       }
    }
 
    /**
@@ -690,6 +701,11 @@ public class TxConnectionListener extends AbstractConnectionListener
             if (wasFreed(null))
             {
                getConnectionManager().returnManagedConnection(TxConnectionListener.this, false);
+            }
+            else if (killConnectionOnBoundary)
+            {
+               log.activeHandles(getPool() != null ? getPool().getName() : "Unknown", connectionHandles.size());
+               getConnectionManager().returnManagedConnection(TxConnectionListener.this, true);
             }
          }
       }
